@@ -35,7 +35,8 @@
  */
 + (NSArray *)touchPathForGestureWithStartPoint:(CGPoint)startPointInWindowCoordinates
                                   andDirection:(GREYDirection)direction
-                                      inWindow:(UIWindow *)window;
+                                      inWindow:(UIWindow *)window
+              distanceBetweenTwoAdjacentPoints:(CGFloat)distanceBetweenTwoAdjacentPoints;
 
 /**
  *  Generates a touch path in the @c window starting from a given @c view in a particular direction
@@ -65,7 +66,8 @@
                          withDirection:(GREYDirection)direction
                                 length:(CGFloat)length
                     startPointPercents:(CGPoint)startPointPercents
-                    outRemainingAmount:(CGFloat *)outRemainingAmountOrNull;
+                    outRemainingAmount:(CGFloat *)outRemainingAmountOrNull
+      distanceBetweenTwoAdjacentPoints:(CGFloat)distanceBetweenTwoAdjacentPoints;
 
 /**
  *  Generates a touch path in the @c window from the given @c startPoint and the given @c
@@ -77,5 +79,6 @@
  *  @return NSArray of CGPoints that denote the points in the touch path.
  */
 + (NSArray *)touchPathForDragGestureWithStartPoint:(CGPoint)startPoint
-                                       andEndPoint:(CGPoint)endPoint;
+                                       andEndPoint:(CGPoint)endPoint
+                  distanceBetweenTwoAdjacentPoints:(CGFloat)distanceBetweenTwoAdjacentPoints;
 @end

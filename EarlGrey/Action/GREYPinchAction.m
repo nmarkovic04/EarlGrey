@@ -172,10 +172,12 @@ static CGFloat const kPinchScale = (CGFloat)0.8;
   // test.
   NSArray *touchPathInDirection1 =
       [GREYPathGestureUtils touchPathForDragGestureWithStartPoint:startPoint1
-                                                      andEndPoint:endPoint1];
+                                                      andEndPoint:endPoint1
+                                 distanceBetweenTwoAdjacentPoints:kGREYDistanceBetweenTwoAdjacentPoints];
   NSArray *touchPathInDirection2 =
       [GREYPathGestureUtils touchPathForDragGestureWithStartPoint:startPoint2
-                                                      andEndPoint:endPoint2];
+                                                      andEndPoint:endPoint2
+                                 distanceBetweenTwoAdjacentPoints:kGREYDistanceBetweenTwoAdjacentPoints];
 
   [GREYSyntheticEvents touchAlongMultiplePaths:@[ touchPathInDirection1, touchPathInDirection2 ]
                               relativeToWindow:window

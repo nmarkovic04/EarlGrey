@@ -148,6 +148,8 @@ GREY_EXTERN NSString *const kGREYConfigKeyIncludeStatusBarWindow;
  */
 GREY_EXTERN NSString *const kGREYConfigKeyScreenshotDirLocation;
 
+GREY_EXTERN NSString *const kGREYConfigKeyScrollSpeedMultiplyFactor;
+
 /**
  *  Provides an interface for runtime configuration of EarlGrey's behavior.
  */

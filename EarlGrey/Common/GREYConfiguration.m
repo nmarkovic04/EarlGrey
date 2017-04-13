@@ -36,6 +36,7 @@ NSString *const kGREYConfigKeyDelayedPerformMaxTrackableDuration =
     @"GREYConfigKeyDelayedPerformMaxTrackableDuration";
 NSString *const kGREYConfigKeyIncludeStatusBarWindow = @"GREYConfigKeyIncludeStatusBarWindow";
 NSString *const kGREYConfigKeyScreenshotDirLocation = @"GREYConfigKeyScreenshotDirLocation";
+NSString *const kGREYConfigKeyScrollSpeedMultiplyFactor = @"GREYConfigKeyScrollSpeedMultiplyFactor";
 
 @implementation GREYConfiguration {
   NSMutableDictionary *_defaultConfiguration; // Dict for storing the default configs
@@ -69,6 +70,7 @@ NSString *const kGREYConfigKeyScreenshotDirLocation = @"GREYConfigKeyScreenshotD
     [self setDefaultValue:@NO forConfigKey:kGREYConfigKeyIncludeStatusBarWindow];
     [self setDefaultValue:@(1.5) forConfigKey:kGREYConfigKeyDelayedPerformMaxTrackableDuration];
     [self setDefaultValue:@[] forConfigKey:kGREYConfigKeyURLBlacklistRegex];
+    [self setDefaultValue:@1.0 forConfigKey:kGREYConfigKeyScrollSpeedMultiplyFactor];
   }
   return self;
 }

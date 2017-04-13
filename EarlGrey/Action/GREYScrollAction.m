@@ -24,6 +24,7 @@
 #import "Additions/NSString+GREYAdditions.h"
 #import "Additions/UIScrollView+GREYAdditions.h"
 #import "Assertion/GREYAssertionDefines.h"
+#import "Common/GREYConfiguration.h"
 #import "Common/GREYError.h"
 #import "Event/GREYSyntheticEvents.h"
 #import "Matcher/GREYAllOf.h"
@@ -106,7 +107,8 @@ static const NSInteger kMinTouchPointsToDetectScrollResistance = 2;
                    withDirection:[GREYConstants reverseOfDirection:_direction]
                           length:amountRemaining
               startPointPercents:_startPointPercents
-              outRemainingAmount:&amountRemaining];
+              outRemainingAmount:&amountRemaining
+           distanceBetweenTwoAdjacentPoints:kGREYDistanceBetweenTwoAdjacentPoints * (CGFloat)GREY_CONFIG_DOUBLE(kGREYConfigKeyScrollSpeedMultiplyFactor)];
       if (!touchPath) {
         GREYPopulateErrorOrLog(errorOrNil,
                                kGREYScrollErrorDomain,

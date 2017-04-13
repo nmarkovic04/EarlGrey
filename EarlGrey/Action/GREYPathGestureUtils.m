@@ -32,11 +32,6 @@
 const NSInteger kGREYScrollDetectionLength = 10;
 
 /**
- *  The maximum distance between any 2 adjacent points in the touch path.
- */
-static const CGFloat kGREYDistanceBetweenTwoAdjacentPoints = 5.0;
-
-/**
  *  Cached screen edge pan detection length for the current device.
  */
 static CGFloat kCachedScreenEdgePanDetectionLength = NAN;
@@ -45,7 +40,8 @@ static CGFloat kCachedScreenEdgePanDetectionLength = NAN;
 
 + (NSArray *)touchPathForGestureWithStartPoint:(CGPoint)startPointInWindowCoords
                                   andDirection:(GREYDirection)direction
-                                      inWindow:(UIWindow *)window {
+                                      inWindow:(UIWindow *)window
+              distanceBetweenTwoAdjacentPoints:(CGFloat)distanceBetweenTwoAdjacentPoints{
   GREYDirection interfaceTransformedDirection =
       [self grey_relativeDirectionForCurrentOrientationWithDirection:direction];
   // Find an endpoint for gesture in window coordinates that gives us the longest path.
@@ -60,21 +56,25 @@ static CGFloat kCachedScreenEdgePanDetectionLength = NAN;
   }
   return [self grey_touchPathWithStartPoint:startPointInWindowCoords
                                    endPoint:endPointInWindowCoords
-                        shouldCancelInertia:NO];
+                        shouldCancelInertia:NO
+           distanceBetweenTwoAdjacentPoints:distanceBetweenTwoAdjacentPoints];
 }
 
 + (NSArray *)touchPathForDragGestureWithStartPoint:(CGPoint)startPoint
-                                       andEndPoint:(CGPoint)endPoint {
+                                       andEndPoint:(CGPoint)endPoint
+                  distanceBetweenTwoAdjacentPoints:(CGFloat)distanceBetweenTwoAdjacentPoints{
   return [self grey_touchPathWithStartPoint:startPoint
                                    endPoint:endPoint
-                        shouldCancelInertia:YES];
+                        shouldCancelInertia:YES
+           distanceBetweenTwoAdjacentPoints:distanceBetweenTwoAdjacentPoints];
 }
 
 + (NSArray *)touchPathForGestureInView:(UIView *)view
                          withDirection:(GREYDirection)direction
                                 length:(CGFloat)length
                     startPointPercents:(CGPoint)startPointPercents
-                    outRemainingAmount:(CGFloat *)outRemainingAmountOrNull {
+                    outRemainingAmount:(CGFloat *)outRemainingAmountOrNull
+      distanceBetweenTwoAdjacentPoints:(CGFloat)distanceBetweenTwoAdjacentPoints{
   NSAssert(isnan(startPointPercents.x) || (startPointPercents.x > 0 && startPointPercents.x < 1),
            @"startPointPercents must be NAN or in the range (0, 1) exclusive");
   NSAssert(isnan(startPointPercents.y) || (startPointPercents.y > 0 && startPointPercents.y < 1),
@@ -151,7 +151,7 @@ static CGFloat kCachedScreenEdgePanDetectionLength = NAN;
   }
   endPoint = CGPointAddVector(startPoint,
                               CGVectorScale(delta, amountWillScroll + kGREYScrollDetectionLength));
-  return [self grey_touchPathWithStartPoint:startPoint endPoint:endPoint shouldCancelInertia:YES];
+  return [self grey_touchPathWithStartPoint:startPoint endPoint:endPoint shouldCancelInertia:YES distanceBetweenTwoAdjacentPoints:distanceBetweenTwoAdjacentPoints];
 }
 
 #pragma mark - Private
@@ -263,7 +263,8 @@ static CGFloat kCachedScreenEdgePanDetectionLength = NAN;
  */
 + (NSArray *)grey_touchPathWithStartPoint:(CGPoint)startPoint
                                  endPoint:(CGPoint)endPoint
-                      shouldCancelInertia:(BOOL)cancelInertia {
+                      shouldCancelInertia:(BOOL)cancelInertia
+         distanceBetweenTwoAdjacentPoints:(CGFloat)distanceBetweenTwoAdjacentPoints{
   const CGVector delta = CGVectorFromEndPoints(startPoint, endPoint, NO);
   const CGFloat pathLength = CGVectorLength(delta);
   if (pathLength <= kGREYScrollDetectionLength) {
@@ -271,11 +272,12 @@ static CGFloat kCachedScreenEdgePanDetectionLength = NAN;
   }
 
   // Compute delta for each point and create a path with it.
-  NSInteger totalPoints = (NSInteger)(pathLength / kGREYDistanceBetweenTwoAdjacentPoints) + 1;
-  CGFloat remaining = pathLength - totalPoints * kGREYDistanceBetweenTwoAdjacentPoints;
+  NSInteger totalPoints = (NSInteger)(pathLength / distanceBetweenTwoAdjacentPoints) + 1;
+  CGFloat remaining = pathLength - totalPoints * distanceBetweenTwoAdjacentPoints;
   CGFloat deltaX = (endPoint.x - startPoint.x) / totalPoints;
   CGFloat deltaY = (endPoint.y - startPoint.y) / totalPoints;
   NSMutableArray *touchPath = [[NSMutableArray alloc] init];
+  
   for (int i = 0; i < totalPoints; i++) {
     CGPoint touchPoint = CGPointMake(startPoint.x + deltaX * i, startPoint.y + deltaY * i);
     [touchPath addObject:[NSValue valueWithCGPoint:touchPoint]];

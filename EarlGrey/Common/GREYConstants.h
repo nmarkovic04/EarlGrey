@@ -78,6 +78,10 @@ GREY_EXTERN NSString *const kGREYAllowVerboseLogging;
  */
 GREY_EXTERN const double kGREYPinchAngleDefault;
 
+
+GREY_EXTERN const CGFloat kGREYDistanceBetweenTwoAdjacentPoints;
+
+
 /**
  *  Directions for scrolling and swiping.
  *

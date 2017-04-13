@@ -123,7 +123,8 @@
   }
   NSArray *touchPath = [GREYPathGestureUtils touchPathForGestureWithStartPoint:startPoint
                                                                   andDirection:_direction
-                                                                      inWindow:window];
+                                                                      inWindow:window
+                                              distanceBetweenTwoAdjacentPoints:kGREYDistanceBetweenTwoAdjacentPoints];
   [GREYSyntheticEvents touchAlongPath:touchPath
                      relativeToWindow:window
                           forDuration:_duration
